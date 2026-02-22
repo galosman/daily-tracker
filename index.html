@@ -1,0 +1,510 @@
+index.html<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Daily Progress Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Stats Section */
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .stat-card-label {
+            font-size: 11px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .stat-card-value {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .form-section h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            grid-column: 1 / -1;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-reset:hover {
+            background: #e0e0e0;
+        }
+
+        /* Data Table */
+        .data-section {
+            margin-bottom: 20px;
+        }
+
+        .data-section h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .data-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .data-item {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .data-item-date {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .data-item-values {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .data-item-value {
+            color: #666;
+        }
+
+        /* Export Section */
+        .export-section {
+            text-align: center;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .btn-export {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+        }
+
+        .btn-export:hover {
+            background: #45a049;
+        }
+
+        .btn-delete {
+            background: #f44336;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+        }
+
+        .btn-delete:hover {
+            background: #da190b;
+        }
+
+        .success-message {
+            background: #4CAF50;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            display: none;
+            animation: slideIn 0.3s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .data-item-values {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .scroll-hint {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📊 Daily Tracker</h1>
+            <p id="today-date"></p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-card-label">Avg Recreation</div>
+                <div class="stat-card-value" id="stat-recreation">0 min</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-label">Avg Learning</div>
+                <div class="stat-card-value" id="stat-learning">0 min</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-label">Avg Diet</div>
+                <div class="stat-card-value" id="stat-diet">0/10</div>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" id="success-message">✓ Progress saved successfully!</div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <h2>📝 Log Your Activity</h2>
+
+            <div class="form-group">
+                <label for="date">📅 Date:</label>
+                <input type="date" id="date" required>
+            </div>
+
+            <div class="input-row">
+                <div class="form-group">
+                    <label for="recreational-time">🎮 Recreation (min)</label>
+                    <input type="number" id="recreational-time" min="0" max="480" value="0" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label for="learning-time">📚 Learning (min)</label>
+                    <input type="number" id="learning-time" min="0" max="480" value="0" placeholder="0">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="diet-score">🥗 Diet Score (1-10)</label>
+                <input type="number" id="diet-score" min="1" max="10" value="5" placeholder="5">
+            </div>
+
+            <div class="button-group">
+                <button class="btn-save" id="btn-save">💾 Save Progress</button>
+                <button class="btn-reset" id="btn-reset">🔄 Clear</button>
+            </div>
+        </div>
+
+        <!-- Data Section -->
+        <div class="data-section">
+            <h2>📈 Recent Activity</h2>
+            <div class="data-list" id="data-list">
+                <div style="text-align: center; color: #999; padding: 20px;">No data yet. Start logging!</div>
+            </div>
+            <div class="scroll-hint">↓ Scroll to see more</div>
+        </div>
+
+        <!-- Export Section -->
+        <div class="export-section">
+            <button class="btn-export" id="btn-export-csv">📥 Export CSV</button>
+            <button class="btn-delete" id="btn-clear-all">🗑️ Clear All Data</button>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date
+        const today = new Date();
+        document.getElementById('date').valueAsDate = today;
+        document.getElementById('today-date').textContent = 
+            today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+        // Load data from localStorage
+        function loadData() {
+            const saved = localStorage.getItem('progressData');
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        // Save data to localStorage
+        function saveData(data) {
+            localStorage.setItem('progressData', JSON.stringify(data));
+        }
+
+        // Display data
+        function displayData() {
+            const data = loadData();
+            const dataList = document.getElementById('data-list');
+
+            if (data.length === 0) {
+                dataList.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">No data yet. Start logging!</div>';
+                updateStats([]);
+                return;
+            }
+
+            // Sort by date (newest first)
+            data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            dataList.innerHTML = data.slice(0, 30).map(entry => `
+                <div class="data-item">
+                    <div class="data-item-date">${new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+                    <div class="data-item-values">
+                        <div class="data-item-value">🎮 ${entry.recreational_time} min</div>
+                        <div class="data-item-value">📚 ${entry.learning_time} min</div>
+                        <div class="data-item-value">🥗 ${entry.diet_score}/10</div>
+                    </div>
+                </div>
+            `).join('');
+
+            updateStats(data);
+        }
+
+        // Update statistics
+        function updateStats(data) {
+            if (data.length === 0) {
+                document.getElementById('stat-recreation').textContent = '0 min';
+                document.getElementById('stat-learning').textContent = '0 min';
+                document.getElementById('stat-diet').textContent = '0/10';
+                return;
+            }
+
+            const avgRecreation = Math.round(data.reduce((sum, d) => sum + d.recreational_time, 0) / data.length);
+            const avgLearning = Math.round(data.reduce((sum, d) => sum + d.learning_time, 0) / data.length);
+            const avgDiet = (data.reduce((sum, d) => sum + d.diet_score, 0) / data.length).toFixed(1);
+
+            document.getElementById('stat-recreation').textContent = avgRecreation + ' min';
+            document.getElementById('stat-learning').textContent = avgLearning + ' min';
+            document.getElementById('stat-diet').textContent = avgDiet + '/10';
+        }
+
+        // Show success message
+        function showSuccessMessage() {
+            const msg = document.getElementById('success-message');
+            msg.style.display = 'block';
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 2000);
+        }
+
+        // Save button
+        document.getElementById('btn-save').addEventListener('click', () => {
+            const date = document.getElementById('date').value;
+            const recreational_time = parseInt(document.getElementById('recreational-time').value) || 0;
+            const learning_time = parseInt(document.getElementById('learning-time').value) || 0;
+            const diet_score = parseInt(document.getElementById('diet-score').value) || 5;
+
+            const data = loadData();
+            const existingIndex = data.findIndex(d => d.date === date);
+
+            if (existingIndex !== -1) {
+                data[existingIndex] = { date, recreational_time, learning_time, diet_score };
+            } else {
+                data.push({ date, recreational_time, learning_time, diet_score });
+            }
+
+            saveData(data);
+            showSuccessMessage();
+            displayData();
+
+            // Reset form
+            document.getElementById('recreational-time').value = '0';
+            document.getElementById('learning-time').value = '0';
+            document.getElementById('diet-score').value = '5';
+            document.getElementById('date').valueAsDate = new Date();
+        });
+
+        // Reset button
+        document.getElementById('btn-reset').addEventListener('click', () => {
+            document.getElementById('recreational-time').value = '0';
+            document.getElementById('learning-time').value = '0';
+            document.getElementById('diet-score').value = '5';
+            document.getElementById('date').valueAsDate = new Date();
+        });
+
+        // Export CSV
+        document.getElementById('btn-export-csv').addEventListener('click', () => {
+            const data = loadData();
+            if (data.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+
+            let csv = 'Date,Recreational Time (min),Learning Time (min),Diet Score\n';
+            data.forEach(entry => {
+                csv += `${entry.date},${entry.recreational_time},${entry.learning_time},${entry.diet_score}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'progress_data.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        });
+
+        // Clear all data
+        document.getElementById('btn-clear-all').addEventListener('click', () => {
+            if (confirm('⚠️ Are you sure? This will delete ALL your data!')) {
+                localStorage.removeItem('progressData');
+                displayData();
+                showSuccessMessage();
+            }
+        });
+
+        // Load data on page load
+        displayData();
+    </script>
+</body>
+</html>
