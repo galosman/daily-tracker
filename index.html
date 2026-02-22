@@ -4,101 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Tracker</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .settings-panel { margin: 20px; padding: 10px; border: 1px solid #ccc; }
-        .color-coded { display: inline-block; padding: 0.5em 1em; color: #fff; }
-        .grade-A { background-color: green; }
-        .grade-B { background-color: yellow; }
-        .grade-C { background-color: orange; }
-        .grade-D { background-color: red; }
-        .grade-F { background-color: black; }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Daily Tracker</h1>
-    <div class="settings-panel">
-        <h2>Set Goals</h2>
-        <label for="learning-goal">Learning Minutes Goal:</label>
-        <input type="number" id="learning-goal" value="0">
-        <select id="learning-importance">
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-        </select>
-        <br><br>
-
-        <label for="recreation-goal">Recreation Minutes Goal:</label>
-        <input type="number" id="recreation-goal" value="0">
-        <select id="recreation-importance">
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-        </select>
-        <br><br>
-
-        <label for="diet-goal">Diet Score Goal:</label>
-        <input type="number" id="diet-goal" value="0">
-        <select id="diet-importance">
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-        </select>
-        <br><br>
-
-        <button onclick="saveGoals()">Save Goals</button>
-    </div>
-    <div id="results"></div>
-
-    <script>
-        function saveGoals() {
-            const learningGoal = document.getElementById('learning-goal').value;
-            const learningImportance = document.getElementById('learning-importance').value;
-            const recreationGoal = document.getElementById('recreation-goal').value;
-            const recreationImportance = document.getElementById('recreation-importance').value;
-            const dietGoal = document.getElementById('diet-goal').value;
-            const dietImportance = document.getElementById('diet-importance').value;
-
-            localStorage.setItem('learningGoal', learningGoal);
-            localStorage.setItem('learningImportance', learningImportance);
-            localStorage.setItem('recreationGoal', recreationGoal);
-            localStorage.setItem('recreationImportance', recreationImportance);
-            localStorage.setItem('dietGoal', dietGoal);
-            localStorage.setItem('dietImportance', dietImportance);
-
-            alert('Goals saved successfully!');
-            displayResults();
-        }
-
-        function displayResults() {
-            const learningGoal = localStorage.getItem('learningGoal');
-            const learningImportance = localStorage.getItem('learningImportance');
-            const recreationGoal = localStorage.getItem('recreationGoal');
-            const recreationImportance = localStorage.getItem('recreationImportance');
-            const dietGoal = localStorage.getItem('dietGoal');
-            const dietImportance = localStorage.getItem('dietImportance');
-
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = `
-                <h2>Your Goals:</h2>
-                <p>Learning Minutes: ${learningGoal} (${learningImportance})</p>
-                <p>Recreation Minutes: ${recreationGoal} (${recreationImportance})</p>
-                <p>Diet Score: ${dietGoal} (${dietImportance})</p>
-            `;
-
-            calculateGrades();
-        }
-
-        function calculateGrades() {
-            // Logic to calculate grades based on the goals and actual accomplishments
-            // Placeholder implementation
-            let grade = 'A'; // This will be calculated
-            let colorClass = 'grade-A'; // This will be determined based on grade
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML += `<span class='color-coded ${colorClass}'>Grade: ${grade}</span>`;
-        }
-
-        window.onload = displayResults;
-    </script>
+    <header>
+        <h1>Daily Tracker</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Goals</h2>
+            <input type="text" id="goalInput" placeholder="Enter your goal..."><br>
+            <button id="addGoal">Add Goal</button>
+            <ul id="goalList"></ul>
+        </section>
+        <section>
+            <h2>Importance Levels</h2>
+            <input type="number" id="importanceInput" min="1" max="5" placeholder="Importance Level">
+        </section>
+        <section>
+            <h2>Grades</h2>
+            <input type="text" id="gradeInput" placeholder="Enter your grade..."><br>
+            <button id="addGrade">Add Grade</button>
+            <ul id="gradeList"></ul>
+        </section>
+        <section>
+            <h2>Data Logging</h2>
+            <textarea id="logInput" placeholder="Log your data..."></textarea>
+            <button id="saveLog">Save Log</button>
+        </section>
+        <section>
+            <h2>Statistics</h2>
+            <div id="statsDisplay"></div>
+        </section>
+        <section>
+            <h2>CSV Export</h2>
+            <button id="exportCSV">Export as CSV</button>
+        </section>
+    </main>
+    <script src="script.js"></script>
 </body>
 </html>
